@@ -50,10 +50,10 @@ aetas::argparse::Arguments aetas::argparse::parse_args(const Parser& parser,
                                                        int argc, char* argv[]) {
   Arguments args;
   for (auto& it : parser.defaults) {
-    if (parser.flag_table.find(it.first) == parser.flag_table.end()) {
+    if (parser.flag_table.find(it.first) != parser.flag_table.end()) {
       args.flg[it.first] =
           (parser.defaults.at(it.first) == "true" ? true : false);
-    } else if (parser.opt_table.find(it.first) == parser.opt_table.end()) {
+    } else if (parser.opt_table.find(it.first) != parser.opt_table.end()) {
       args.opt[it.first] = parser.defaults.at(it.first);
     }
   }
