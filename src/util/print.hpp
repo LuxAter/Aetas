@@ -1,5 +1,5 @@
-#ifndef ITER_PRINT_HPP_
-#define ITER_PRINT_HPP_
+#ifndef AETAS_PRINT_HPP_
+#define AETAS_PRINT_HPP_
 
 #include <array>
 #include <iostream>
@@ -31,4 +31,4 @@ std::ostream& operator<<(std::ostream& out, const std::array<_T, _N>& rhs) {
   return out;
 }
 
-#endif  // ITER_PRINT_HPP_
+#endif  // AETAS_PRINT_HPP_

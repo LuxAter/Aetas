@@ -1,5 +1,5 @@
-#ifndef ITER_RAND_HPP_
-#define ITER_RAND_HPP_
+#ifndef AETAS_RAND_HPP_
+#define AETAS_RAND_HPP_
 
 #include <algorithm>
 #include <cmath>
@@ -7,7 +7,7 @@
 #include <random>
 #include <vector>
 
-namespace iter {
+namespace aetas {
 namespace random {
   double rand(double low = 0.0, double high = 1.0);
   std::vector<double> rand(const unsigned& n, double low = 0.0,
@@ -42,6 +42,6 @@ namespace random {
     return out;
   }
 }  // namespace random
-}  // namespace iter
+}  // namespace aetas
 
-#endif  // ITER_RAND_HPP_
+#endif  // AETAS_RAND_HPP_

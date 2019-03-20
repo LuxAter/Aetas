@@ -1,10 +1,10 @@
-#ifndef ITER_UTIL_HPP_
-#define ITER_UTIL_HPP_
+#ifndef AETAS_UTIL_HPP_
+#define AETAS_UTIL_HPP_
 
+#include "argparse.hpp"
 #include "print.hpp"
 #include "rand.hpp"
 #include "range.hpp"
 #include "time.hpp"
-#include "argparse.hpp"
 
-#endif  // ITER_UTIL_HPP_
+#endif  // AETAS_UTIL_HPP_

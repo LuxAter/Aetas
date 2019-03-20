@@ -1,9 +1,9 @@
-#ifndef ITER_RANGE_HPP_
-#define ITER_RANGE_HPP_
+#ifndef AETAS_RANGE_HPP_
+#define AETAS_RANGE_HPP_
 
 #include <vector>
 
-namespace iter {
+namespace aetas {
 namespace range {
   template <typename _T>
   std::vector<_T> range(_T stop) {
@@ -42,6 +42,6 @@ namespace range {
     return out;
   }
 }  // namespace range
-}  // namespace iter
+}  // namespace aetas
 
-#endif  // ITER_RANGE_HPP_
+#endif  // AETAS_RANGE_HPP_

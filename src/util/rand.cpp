@@ -6,12 +6,12 @@
 #include <random>
 #include <vector>
 
-double iter::random::rand(double low, double high) {
+double aetas::random::rand(double low, double high) {
   std::mt19937 gen(std::random_device{}());
   return std::uniform_real_distribution<double>{low, high}(gen);
 }
-std::vector<double> iter::random::rand(const unsigned& n, double low,
-                                       double high) {
+std::vector<double> aetas::random::rand(const unsigned& n, double low,
+                                        double high) {
   std::mt19937 gen(std::random_device{}());
   std::uniform_real_distribution<double> dis{low, high};
   std::vector<double> vals;
@@ -20,12 +20,12 @@ std::vector<double> iter::random::rand(const unsigned& n, double low,
   }
   return vals;
 }
-double iter::random::randn(double mean, double variance) {
+double aetas::random::randn(double mean, double variance) {
   std::mt19937 gen(std::random_device{}());
   return std::normal_distribution<double>{mean, std::sqrt(variance)}(gen);
 }
-std::vector<double> iter::random::randn(const unsigned& n, double mean,
-                                        double variance) {
+std::vector<double> aetas::random::randn(const unsigned& n, double mean,
+                                         double variance) {
   std::mt19937 gen(std::random_device{}());
   std::normal_distribution<double> dis{mean, std::sqrt(variance)};
   std::vector<double> vals;
@@ -34,11 +34,11 @@ std::vector<double> iter::random::randn(const unsigned& n, double mean,
   }
   return vals;
 }
-int iter::random::randint(int low, int high) {
+int aetas::random::randint(int low, int high) {
   std::mt19937 gen(std::random_device{}());
   return std::uniform_int_distribution<int>{low, high}(gen);
 }
-std::vector<int> iter::random::randint(const unsigned& n, int low, int high) {
+std::vector<int> aetas::random::randint(const unsigned& n, int low, int high) {
   std::mt19937 gen(std::random_device{}());
   std::uniform_int_distribution<int> dis{low, high};
   std::vector<int> vals;

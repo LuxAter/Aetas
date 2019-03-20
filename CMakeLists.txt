@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(Iter)
+project(Aetas)
 
 # Set C/C++ Versions.
 set (CMAKE_C_STANDARD 11)
@@ -16,8 +16,8 @@ endif()
 # Compiles libiter.a.
 file(GLOB_RECURSE lib_src ${CMAKE_SOURCE_DIR} "src/*.cpp")
 list(REMOVE_ITEM lib_src "${CMAKE_SOURCE_DIR}/src/main.cpp")
-add_library(iter ${lib_src})
+add_library(aetas ${lib_src})
 
 # Compiles main test example.
-add_executable(iter.exe src/main.cpp)
-target_link_libraries(iter.exe iter)
+add_executable(aetas.exe src/main.cpp)
+target_link_libraries(aetas.exe aetas)

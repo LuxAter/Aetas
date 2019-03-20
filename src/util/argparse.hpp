@@ -1,11 +1,11 @@
-#ifndef ITER_ARGPARSE_HPP_
-#define ITER_ARGPARSE_HPP_
+#ifndef AETAS_ARGPARSE_HPP_
+#define AETAS_ARGPARSE_HPP_
 
 #include <map>
 #include <string>
 #include <vector>
 
-namespace iter {
+namespace aetas {
 namespace argparse {
   struct Arguments {
     std::map<std::string, bool> flg;
@@ -43,6 +43,6 @@ namespace argparse {
 
   Arguments parse_args(const Parser& parser, int argc, char* argv[]);
 }  // namespace argparse
-}  // namespace iter
+}  // namespace aetas
 
-#endif  // ITER_ARGPARSE_HPP_
+#endif  // AETAS_ARGPARSE_HPP_

@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-void iter::argparse::Parser::add_flag(std::string name, bool default_val,
-                                      std::string help) {
+void aetas::argparse::Parser::add_flag(std::string name, bool default_val,
+                                       std::string help) {
   std::vector<std::string> arg_names;
   while (name.find("|") != std::string::npos) {
     arg_names.push_back(name.substr(0, name.find("|")));
@@ -24,9 +24,9 @@ void iter::argparse::Parser::add_flag(std::string name, bool default_val,
     flag_table[str] = name;
   }
 }
-void iter::argparse::Parser::add_option(std::string name,
-                                        std::string default_val,
-                                        std::string help) {
+void aetas::argparse::Parser::add_option(std::string name,
+                                         std::string default_val,
+                                         std::string help) {
   std::vector<std::string> arg_names;
   while (name.find("|") != std::string::npos) {
     arg_names.push_back(name.substr(0, name.find("|")));
@@ -46,8 +46,8 @@ void iter::argparse::Parser::add_option(std::string name,
   }
 }
 
-iter::argparse::Arguments iter::argparse::parse_args(const Parser& parser,
-                                                     int argc, char* argv[]) {
+aetas::argparse::Arguments aetas::argparse::parse_args(const Parser& parser,
+                                                       int argc, char* argv[]) {
   Arguments args;
   for (auto& it : parser.defaults) {
     if (parser.flag_table.find(it.first) == parser.flag_table.end()) {
