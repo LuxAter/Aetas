@@ -23,6 +23,15 @@ endif()
 # }}}
 # }}}
 
+# DOCUMENTATION {{{
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+  set(DOXYGEN_GENERATE_HTML YES)
+  set(DOXYGEN_GENERATE_LATEX YES)
+  doxygen_add_docs(docs ${PROJECT_SOURCE_DIR})
+endif()
+# }}}
+
 # COMPILE COMMANDS {{{
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json")

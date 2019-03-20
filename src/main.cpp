@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
   // Initial Population
   std::vector<std::vector<int>> pop;
   for (int i = 0; i < args.geti("size"); ++i) {
-    pop.push_back(aetas::random::randint(10, 0, 10));
+    pop.push_back(aetas::random::randint(10, 0, 11));
   }
 
   // Calculate Initial Fitness
@@ -21,6 +21,12 @@ int main(int argc, char* argv[]) {
   for (auto& it : pop) {
     fitness.push_back(std::sum(it));
   }
+
+  std::cout << fitness << "\n";
+  std::cout << std::max(fitness) << "\n";
+  std::cout << std::min(fitness) << "\n";
+  std::cout << std::range(fitness) << "\n";
+  std::cout << std::mean(fitness) << "\n";
 
   return 0;
 }
