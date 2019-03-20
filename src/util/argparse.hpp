@@ -20,7 +20,8 @@ namespace argparse {
     std::vector<std::vector<std::string>> names;
     std::map<std::string, std::string> defaults;
     std::map<std::string, std::string> arg_help;
-    std::map<std::string, std::string> name_table;
+    std::map<std::string, std::string> opt_table;
+    std::map<std::string, std::string> flag_table;
     bool help = true;
     bool version = false;
 

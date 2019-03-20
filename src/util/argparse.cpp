@@ -21,7 +21,7 @@ void iter::argparse::Parser::add_flag(std::string name, bool default_val,
   defaults[name] = (default_val ? "true" : "false");
   arg_help[name] = help;
   for (auto& str : arg_names) {
-    name_table[str] = name;
+    flag_table[str] = name;
   }
 }
 void iter::argparse::Parser::add_option(std::string name,
@@ -42,11 +42,41 @@ void iter::argparse::Parser::add_option(std::string name,
   defaults[name] = default_val;
   arg_help[name] = help;
   for (auto& str : arg_names) {
-    name_table[str] = name;
+    opt_table[str] = name;
   }
 }
 
 iter::argparse::Arguments iter::argparse::parse_args(const Parser& parser,
-    int argc, char* argv[]) {
-
+                                                     int argc, char* argv[]) {
+  Arguments args;
+  for (auto& it : parser.defaults) {
+    if (parser.flag_table.find(it.first) == parser.flag_table.end()) {
+      args.flg[it.first] =
+          (parser.defaults.at(it.first) == "true" ? true : false);
+    } else if (parser.opt_table.find(it.first) == parser.opt_table.end()) {
+      args.opt[it.first] = parser.defaults.at(it.first);
+    }
+  }
+  for (int i = 1; i < argc; ++i) {
+    std::string arg(argv[i]);
+    while (arg.front() == '-') {
+      arg = arg.substr(1);
+    }
+    typename std::map<std::string, std::string>::const_iterator it =
+        parser.flag_table.find(arg);
+    if (it != parser.flag_table.end()) {
+      args.flg[it->second] =
+          (parser.defaults.at(it->second) == "true") ? false : true;
+    } else if ((it = parser.opt_table.find(arg)) != parser.opt_table.end()) {
+      if (i != argc - 1) {
+        args.opt[it->second] = argv[i + 1];
+        i++;
+      } else {
+        printf("\"%s\" requires an argument\n", argv[i]);
+      }
+    } else {
+      args.args.push_back(arg);
+    }
+  }
+  return args;
 }

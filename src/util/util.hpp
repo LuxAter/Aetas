@@ -5,5 +5,6 @@
 #include "rand.hpp"
 #include "range.hpp"
 #include "time.hpp"
+#include "argparse.hpp"
 
 #endif  // ITER_UTIL_HPP_
