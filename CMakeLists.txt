@@ -7,18 +7,20 @@ set (CMAKE_CXX_STANDARD 17)
 # }}}
 
 # PACKAGES {{{
-# FreeType2 {{{
-find_package(Freetype)
-if(FREETYPE_FOUND)
-  include_directories(${FREETYPE_INCLUDE_DIRS})
-  link_libraries(${FREETYPE_LIBRARIES})
+# PYTHON {{{
+find_package(PythonLibs)
+if(PYTHONLIBS_FOUND)
+  include_directories(${PYTHON_INCLUDE_DIRS})
+  link_libraries(${PYTHON_LIBRARIES})
+  add_definitions(-DAETAS_PYTHON)
 endif()
 # }}}
-# PNG {{{
-find_package(PNG)
-if(PNG_FOUND)
-  include_directories(${PNG_INCLUDE_DIRS})
-  link_libraries(${PNG_LIBRARIES})
+# LUA {{{
+find_package(Lua)
+if(LUA_FOUND)
+  include_directories(${LUA_INCLUDE_DIR})
+  link_libraries(${LUA_LIBRARIES})
+  add_definitions(-DAETAS_LUA)
 endif()
 # }}}
 # }}}
@@ -30,6 +32,12 @@ if(DOXYGEN_FOUND)
   set(DOXYGEN_GENERATE_LATEX YES)
   doxygen_add_docs(docs ${PROJECT_SOURCE_DIR})
 endif()
+# }}}
+
+# RESOURCE FILES {{{
+file(GLOB_RECURSE resource_src ${CMAKE_SOURCE_DIR} "resources/*")
+message(${resource_src})
+file(COPY ${resource_src} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/resources/")
 # }}}
 
 # COMPILE COMMANDS {{{

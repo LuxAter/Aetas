@@ -15,6 +15,13 @@
 #include <vector>
 
 namespace std {
+
+template <typename>
+struct is_vector : std::false_type {};
+
+template <typename _T, typename _A>
+struct is_vector<std::vector<_T, _A>> : std::true_type {};
+
 /**
  * @brief Finds the sum of the values in a vector.
  *
