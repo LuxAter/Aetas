@@ -114,6 +114,24 @@ namespace random {
   }
 
   /**
+   * @brief Picks a random value from a vector, and removes it.
+   *
+   * @tparam _T Type of vector.
+   * @param a Vector to pick value from.
+   *
+   * @return A random element of the vector ``a``.
+   */
+  template <typename _T>
+  _T choice_remove(std::vector<_T>& a) {
+    std::mt19937 gen(std::random_device{}());
+    std::size_t i =
+        std::uniform_int_distribution<std::size_t>{0, a.size() - 1}(gen);
+    _T val = a[i];
+    a.erase(a.begin() + i);
+    return val;
+  }
+
+  /**
    * @brief Shuffles a vector to a random order.
    *
    * @tparam _T Type of vector.

@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <iostream>
 #include <numeric>
+#include <sstream>
+#include <string>
 #include <vector>
 
 namespace std {
@@ -33,6 +35,19 @@ struct is_vector<std::vector<_T, _A>> : std::true_type {};
 template <typename _T>
 _T sum(const std::vector<_T>& vec) {
   return std::accumulate(vec.begin(), vec.end(), _T());
+}
+
+/**
+ * @brief Finds the sum of the values in a vector.
+ *
+ * @tparam _T Type of vector.
+ * @param vec Vector to accumulate.
+ *
+ * @return Sum of the values in vec.
+ */
+template <typename _T>
+_T sum(const std::vector<_T>& vec, const std::size_t& i) {
+  return std::accumulate(vec.begin(), vec.begin() + i, _T());
 }
 
 /**
@@ -96,6 +111,36 @@ _T range(const std::vector<_T>& vec) {
 }
 
 /**
+ * @brief Sorts one vector by the values of a second vector.
+ *
+ * @tparam _T Type of vector to sort.
+ * @tparam _U Type of vector to sort by.
+ * @param lhs Vector to sort.
+ * @param rhs Vector to use as sorting keys.
+ *
+ * @return Sorted version of ``lhs`` and ``rhs``.
+ */
+template <typename _T, typename _U>
+void sort(std::vector<_T>& lhs, std::vector<_U>& rhs,
+          bool reverse_vec = false) {
+  std::vector<std::pair<_U, _T>> vec;
+  for (std::size_t i = 0; i < lhs.size() && i < rhs.size(); ++i) {
+    vec.push_back({rhs[i], lhs[i]});
+  }
+  std::sort(vec.begin(), vec.end());
+  lhs.clear();
+  rhs.clear();
+  for (std::size_t i = 0; i < vec.size(); ++i) {
+    lhs.push_back(vec[i].second);
+    rhs.push_back(vec[i].first);
+  }
+  if (reverse_vec) {
+    std::reverse(lhs.begin(), lhs.end());
+    std::reverse(rhs.begin(), rhs.end());
+  }
+}
+
+/**
  * @brief Stream operator for Vector classes.
  *
  * This is just an overload to allow for printing of vectors.
@@ -117,6 +162,20 @@ std::ostream& operator<<(std::ostream& out, const std::vector<_T>& rhs) {
   }
   out << ">";
   return out;
+}
+
+template <typename _T>
+std::string pprint(const std::vector<_T>& rhs) {
+  std::stringstream ss;
+  ss << "<\n  ";
+  for (std::size_t i = 0; i < rhs.size(); ++i) {
+    ss << rhs[i];
+    if (i != rhs.size() - 1) {
+      ss << "\n  ";
+    }
+  }
+  ss << "\n>";
+  return ss.str();
 }
 
 }  // namespace std
