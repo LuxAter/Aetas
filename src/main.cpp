@@ -3,6 +3,8 @@
 #include "std/std.hpp"
 #include "util/util.hpp"
 
+#include "genetic.hpp"
+
 int main(int argc, char* argv[]) {
   aetas::argparse::Parser parser;
   parser.add_option("s|size", "10");
@@ -11,10 +13,12 @@ int main(int argc, char* argv[]) {
   aetas::argparse::Arguments args =
       aetas::argparse::parse_args(parser, argc, argv);
 
+  auto eval_func = aetas::sum_eval<int>();
+
   // Initialization
   std::vector<std::vector<int>> pop;
   for (int i = 0; i < args.geti("size"); ++i) {
-    pop.push_back(aetas::random::randint(10, 0, 10));
+    pop.push_back(aetas::random::vrandint(10, 0, 10));
   }
 
   int counter = 0;

@@ -110,6 +110,16 @@ _T range(const std::vector<_T>& vec) {
   return (*(vals.second) - *(vals.first));
 }
 
+template <typename _T>
+std::vector<_T> sort(const std::vector<_T>& lhs, bool reverse_vec = false) {
+  std::vector<_T> ret(lhs);
+  std::sort(ret.begin(), ret.end());
+  if (reverse_vec) {
+    std::reverse(ret.begin(), ret.end());
+  }
+  return ret;
+}
+
 /**
  * @brief Sorts one vector by the values of a second vector.
  *

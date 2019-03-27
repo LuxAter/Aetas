@@ -35,7 +35,7 @@ namespace random {
    *
    * @return Vector of ``n`` random values in the range \f$[low,high)\f$.
    */
-  std::vector<double> rand(const unsigned& n, double low = 0.0,
+  std::vector<double> vrand(const unsigned& n, double low = 0.0,
                            double high = 1.0);
   /**
    * @brief Generates normal random value.
@@ -57,7 +57,7 @@ namespace random {
    * @return Vector of ``n`` random values from a normal distribution with mean
    * of ``mean`` and variance of ``variance``.
    */
-  std::vector<double> randn(const unsigned& n, double mean = 0.0,
+  std::vector<double> vrandn(const unsigned& n, double mean = 0.0,
                             double variance = 1.0);
   /**
    * @brief Generates a uniform random integer.
@@ -67,7 +67,11 @@ namespace random {
    *
    * @return Random integer in range \f$[low,high)\f$.
    */
-  int randint(int low = 0, int high = std::numeric_limits<int>::max());
+  template <typename _T=int>
+    _T randint(_T low = 0, _T high = std::numeric_limits<int>::max()){
+    std::mt19937 gen(std::random_device{}());
+    return std::uniform_int_distribution<_T>{low, high}(gen);
+    }
   /**
    * @brief Generates a vector of uniform random integers.
    *
@@ -77,8 +81,17 @@ namespace random {
    *
    * @return Vector of ``n`` random integers in range \f$[low,high)\f$.
    */
-  std::vector<int> randint(const unsigned& n, int low = 0,
-                           int high = std::numeric_limits<int>::max());
+  template <typename _T=int>
+  std::vector<_T> vrandint(const unsigned& n, _T low = 0,
+                          _T high = std::numeric_limits<_T>::max()) {
+    std::mt19937 gen(std::random_device{}());
+    std::uniform_int_distribution<_T> dis{low, high};
+    std::vector<_T> vals;
+    for (unsigned i = 0; i < n; ++i) {
+      vals.push_back(dis(gen));
+    }
+    return vals;
+  }
 
   /**
    * @brief Picks a random value from a vector.
