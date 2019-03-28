@@ -23,6 +23,12 @@ if(LUA_FOUND)
   add_definitions(-DAETAS_LUA)
 endif()
 # }}}
+# PThread {{{
+find_package(Threads)
+if (THREADS_FOUND)
+  link_libraries(${CMAKE_THREAD_LIBS_INIT})
+endif()
+# }}}
 # }}}
 
 # DOCUMENTATION {{{
