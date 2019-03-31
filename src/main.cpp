@@ -13,12 +13,19 @@ int main(int argc, char* argv[]) {
   aetas::argparse::Arguments args =
       aetas::argparse::parse_args(parser, argc, argv);
 
-  aetas::Genetic<double> algo;
+  // auto script = varia::load_script("line_of_best_fit.py");
+  // std::cout << script->has("init") << ":" << script->hasf("init") << "\n";
 
-  algo.terminator = aetas::maximize_termination;
+  aetas::Genetic<double> algo(100,
+  varia::load_script("line_of_best_fit.py"));
+
+  // algo.terminator = aetas::maximize_termination;
   algo.top_pop = 0;
+  algo.thread_count = 1;
 
   algo.exec();
+  // algo.initialize();
+  // std::cout << algo.get_best_fitness() << "::" << algo.get_best() << "\n";
   std::cout << "GENERATION: " << algo.generations << "\n";
   std::cout << "FITNESS: " << algo.get_best_fitness() << "\n";
   std::cout << "CHROMO: " << algo.get_best() << "\n";

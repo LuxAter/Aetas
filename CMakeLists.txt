@@ -7,21 +7,9 @@ set (CMAKE_CXX_STANDARD 17)
 # }}}
 
 # PACKAGES {{{
-# PYTHON {{{
-find_package(PythonLibs)
-if(PYTHONLIBS_FOUND)
-  include_directories(${PYTHON_INCLUDE_DIRS})
-  link_libraries(${PYTHON_LIBRARIES})
-  add_definitions(-DAETAS_PYTHON)
-endif()
-# }}}
-# LUA {{{
-find_package(Lua)
-if(LUA_FOUND)
-  include_directories(${LUA_INCLUDE_DIR})
-  link_libraries(${LUA_LIBRARIES})
-  add_definitions(-DAETAS_LUA)
-endif()
+# Varia {{{
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/varia")
+include_directories("${Varia_SOURCE_DIR}/include/")
 # }}}
 # PThread {{{
 find_package(Threads)
@@ -43,7 +31,7 @@ endif()
 # RESOURCE FILES {{{
 file(GLOB_RECURSE resource_src ${CMAKE_SOURCE_DIR} "resources/*")
 message(${resource_src})
-file(COPY ${resource_src} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/resources/")
+file(COPY ${resource_src} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
 # }}}
 
 # COMPILE COMMANDS {{{
@@ -63,5 +51,5 @@ add_library(aetas ${lib_src})
 
 # CORE EXECUTABLE {{{
 add_executable(aetas.exe src/main.cpp)
-target_link_libraries(aetas.exe aetas)
+target_link_libraries(aetas.exe aetas varia)
 # }}}
