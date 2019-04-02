@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import random
 
 def initialize(n_pop,n_points):
-    return [np.random.rand(n_points) for i in range(n_pop)]
+    return [np.random.rand(2*n_points) for i in range(n_pop)]
 
 def sort_by_fitness(pop, fitness):
     fitness, pop = zip(*sorted(zip(fitness, pop)))
@@ -26,8 +26,7 @@ def evaluate(pop):
             for ch in pop]
 
 def mutation(new_pop,prob_m):
-    print("no")
-        
+    
 
 def main():
     n_pop = 100
