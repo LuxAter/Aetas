@@ -1,9 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def init(n_pop,n_points):
-    pop = np.random.rand(n_pop,n_points)
-    return pop
+def initialize(n_pop,n_points):
+    return [np.random.rand(n_points)]*n_pop
 
 def sort_by_fitness(pop, fitness):
     fitness, pop = zip(*sorted(zip(fitness, pop)))
