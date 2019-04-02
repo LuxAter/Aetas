@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 
-def init(n_pop,n_points):
-    pop = np.random.rand(n_pop,n_points)
-    return pop
+def initialize(n_pop,n_points):
+    return [np.random.rand(2*n_points) for i in range(n_pop)]
 
 def sort_by_fitness(pop, fitness):
     fitness, pop = zip(*sorted(zip(fitness, pop)))
@@ -27,13 +27,12 @@ def evaluate(pop):
     ]) + np.sqrt((ch[-2] - 1)**2 + (ch[-1] - 1)**2))
             for ch in pop]
 
-
 def main():
     n_pop = 100
     n_points = 10
     n_keep = 10
     prob_m = 0.2
-    pop = initalize(n_pop, n_points)
+    pop = initialize(n_pop, n_points)
     for gen in range(100):
         fitness = evaluate(pop)
         print("GEN: {:5} FIT: {}".format(gen, max(fitness)))
