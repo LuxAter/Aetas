@@ -1,17 +1,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def sort_by_fitness(pop, fitness):
     fitness, pop = zip(*sorted(zip(fitness, pop)))
     return pop, fitness
 
-def plot_best(generation, pop, fitness, plot_n = 1):
+
+def plot_best(generation, pop, fitness, plot_n=1):
     pop, fitness = sort_by_fitness(pop, fitness)
     for i in range(plot_n):
         X = [pop[i][j] for j in range(0, len(pop[i]), 2)]
         Y = [pop[i][j] for j in range(1, len(pop[i]), 2)]
-        plt.plot(X,Y)
+        plt.plot(X, Y)
     plt.imsave("img/{}.png".format(generation))
+
 
 def evaluate(pop):
     return [(np.sqrt(ch[0]**2 + ch[1]**2) + np.sum([
@@ -21,6 +24,7 @@ def evaluate(pop):
     ]) + np.sqrt((ch[-2] - 1)**2 + (ch[-1] - 1)**2))
             for ch in pop]
 
+
 def main():
     n_pop = 100
     n_points = 10
@@ -29,6 +33,7 @@ def main():
     pop = initalize(n_pop, n_points)
     for gen in range(100):
         fitness = evaluate(pop)
+        print("GEN: {:5} FIT: {}".format(gen, max(fitness)))
         plot_best(gen, pop, fitness, 3)
         if terminate(fitness):
             break
@@ -37,3 +42,6 @@ def main():
         new_pop = mutate(new_pop, prob_m)
         pop = replace(pop, fitness, new_pop, n_keep)
     print(max(fitness))
+
+if __name__ == "__main__":
+    main()
