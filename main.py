@@ -44,6 +44,12 @@ def evaluate(pop):
             for ch in pop]
 
 def terminate(fitness, tolerance):
+    """Terminate process if reach total distance withing tolerance level of
+    error from a straight line --> sqrt(2).
+    """
+    for i in fitness:
+        if abs((2**(1.0/2)) - i) < tolerance:
+            return True
     return False
 
 def main():
