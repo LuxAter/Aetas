@@ -43,18 +43,21 @@ def evaluate(pop):
     ]) + np.sqrt((ch[-2] - 1)**2 + (ch[-1] - 1)**2))
             for ch in pop]
 
+def terminate(fitness, tolerance):
+    return False
 
 def main():
     n_pop = 100
     n_points = 10
     n_keep = 10
     prob_m = 0.2
+    tolerance = .001
     pop = initialize(n_pop, n_points)
     for gen in range(100):
         fitness = evaluate(pop)
         print("GEN: {:5} FIT: {}".format(gen, min(fitness)))
         plot_best(gen, pop, fitness, 3)
-        if terminate(fitness):
+        if terminate(fitness, tolerance):
             break
         new_pop = selection(pop, fitness, n_keep)
         new_pop = crossover(new_pop, k)
