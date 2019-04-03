@@ -3,6 +3,8 @@
 from os.path import isdir
 import numpy as np
 import matplotlib.pyplot as plt
+from random import shuffle
+import random
 
 from pprint import pprint
 
@@ -52,12 +54,30 @@ def terminate(fitness, tolerance):
             return True
     return False
 
+def crossover(new_pop, k):
+    """Performs 2-fold crossover on the new population.
+    First, shuffles  population to create random parents to go down list.
+    Repeats the following len(new_pop) times:
+    1. Choose k random numbers in range of points
+    2. Sort the points and perform crossover in their order for each fold
+    """
+    shuffle(new_pop)
+    for i in range(len(new_pop)//2):
+        points = random.sample(range(1, len(new_pop[i])), k)
+        points.sort()
+        for fold in range(k):
+            x = points[fold]
+            tmp = new_pop[2*i][:x].copy()
+            new_pop[2*i][:x], new_pop[2*i + 1][:x]  = new_pop[2*i + 1][:x], tmp
+    return new_pop
+
 def main():
     n_pop = 100
     n_points = 10
     n_keep = 10
     prob_m = 0.2
     tolerance = .001
+    k = 2
     pop = initialize(n_pop, n_points)
     for gen in range(100):
         fitness = evaluate(pop)
