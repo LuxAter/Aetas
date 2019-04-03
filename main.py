@@ -13,7 +13,7 @@ def sort_by_fitness(pop, fitness):
     """Sorts population based by the value of fitness, meaning our most fit is
     at the begining, and the least fit is at the end."""
     fitness, pop = zip(*sorted(zip(fitness, pop)))
-    return pop, fitness
+    return list(pop), list(fitness)
 
 
 def plot_best(generation, pop, fitness, plot_n=1):
@@ -102,25 +102,43 @@ def crossover(new_pop, k):
                                                                  1][:x], tmp
     return new_pop
 
+def mutate(new_pop,prob_m,gene_m):
+    pop = [np.copy(chrom) for chrom in new_pop]
+    for chrom in pop:
+        if random.random() < prob_m:
+            for i in range(len(chrom)):
+                if random.random() < gene_m:
+                    chrom[i] = random.random()
+    return pop
+
+def replace(pop,fitness,new_pop,n_keep):
+    pop, fitness = sort_by_fitness(pop,fitness)
+    return pop[:n_keep]+new_pop
 
 def main():
     n_pop = 100
     n_points = 10
     n_keep = 10
-    prob_m = 0.2
+    prob_m = 0.4
+    gene_m = 0.1
     tolerance = .001
     k = 2
     pop = initialize(n_pop, n_points)
     for gen in range(100):
         fitness = evaluate(pop)
+        print(fitness)
+        print(len(fitness))
         print("GEN: {:5} FIT: {}".format(gen, min(fitness)))
         plot_best(gen, pop, fitness, 3)
         if terminate(fitness, tolerance):
             break
         new_pop = selection(pop, fitness, n_keep)
         new_pop = crossover(new_pop, k)
-        new_pop = mutate(new_pop, prob_m)
+        new_pop = mutate(new_pop, prob_m, gene_m)
         pop = replace(pop, fitness, new_pop, n_keep)
+        print(pop)
+        print(len(pop))
+
     print(max(fitness))
 
 
