@@ -12,7 +12,8 @@ from pprint import pprint
 def sort_by_fitness(pop, fitness):
     """Sorts population based by the value of fitness, meaning our most fit is
     at the begining, and the least fit is at the end."""
-    fitness, pop = zip(*sorted(zip(fitness, pop)))
+    data = list(zip(fitness, pop))
+    fitness, pop = zip(*sorted(data, key=lambda x: x[0]))
     return list(pop), list(fitness)
 
 
@@ -126,9 +127,8 @@ def main():
     pop = initialize(n_pop, n_points)
     for gen in range(100):
         fitness = evaluate(pop)
-        print(fitness)
-        print(len(fitness))
         print("GEN: {:5} FIT: {}".format(gen, min(fitness)))
+        # pprint(list(zip(fitness, pop)))
         plot_best(gen, pop, fitness, 3)
         if terminate(fitness, tolerance):
             break
@@ -136,8 +136,6 @@ def main():
         new_pop = crossover(new_pop, k)
         new_pop = mutate(new_pop, prob_m, gene_m)
         pop = replace(pop, fitness, new_pop, n_keep)
-        print(pop)
-        print(len(pop))
 
     print(max(fitness))
 
