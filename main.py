@@ -109,7 +109,8 @@ def mutate(new_pop,prob_m,gene_m):
         if random.random() < prob_m:
             for i in range(len(chrom)):
                 if random.random() < gene_m:
-                    chrom[i] = random.random()
+                    chrom[i] = chrom[i] + 0.1-0.2*random.random()
+                    #chrom[i] = random.random()
     return pop
 
 def replace(pop,fitness,new_pop,n_keep):
@@ -120,24 +121,25 @@ def main():
     n_pop = 100
     n_points = 10
     n_keep = 10
-    prob_m = 0.4
+    prob_m = 0.5
     gene_m = 0.1
     tolerance = .001
     k = 2
     pop = initialize(n_pop, n_points)
-    for gen in range(100):
+    for gen in range(1000):
         fitness = evaluate(pop)
         print("GEN: {:5} FIT: {}".format(gen, min(fitness)))
         # pprint(list(zip(fitness, pop)))
         plot_best(gen, pop, fitness, 3)
         if terminate(fitness, tolerance):
             break
-        new_pop = selection(pop, fitness, n_keep)
+        pop_copy = [np.copy(chrom) for chrom in pop]
+        new_pop = selection(pop_copy, fitness, n_keep)
         new_pop = crossover(new_pop, k)
         new_pop = mutate(new_pop, prob_m, gene_m)
         pop = replace(pop, fitness, new_pop, n_keep)
 
-    print(max(fitness))
+    print(min(fitness))
 
 
 if __name__ == "__main__":
