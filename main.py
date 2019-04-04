@@ -113,8 +113,8 @@ def mutate(new_pop, prob_m, gene_m):
         if random.random() < prob_m:
             for i in range(len(chrom)):
                 if random.random() < gene_m:
-                    # chrom[i] = chrom[i] + 0.1 - 0.2 * random.random()
-                    chrom[i] = random.random()
+                    chrom[i] = chrom[i] + 0.1 - 0.2 * random.random()
+                    # chrom[i] = random.random()
     return pop
 
 
@@ -163,8 +163,12 @@ def main():
         '--plot', action='store_true', help='Plot each generation')
     parser.add_argument(
         '--time', action='store_true', help='Time each function')
-    parser.add_argument('--epoch', type=int, default=10, help='Generations per epoch')
-    parser.add_argument('--save', action='store_true', help='Saves the top average fitness for each generation')
+    parser.add_argument(
+        '--epoch', type=int, default=10, help='Generations per epoch')
+    parser.add_argument(
+        '--save',
+        action='store_true',
+        help='Saves the top average fitness for each generation')
     args = parser.parse_args()
     n_pop = args.pop
     n_points = args.points
