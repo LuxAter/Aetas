@@ -1,6 +1,16 @@
 from enum import Enum
 import numpy as np
 
+def valid(position, N):
+    """Valid if the following things are not true:
+    1. has not intersected with the edge, so no x or y = 0 or N
+    2. has not intersected with itself, so no tuple is the same as another tuple
+    """
+    if len([item for item in position[0] if item[0] == -1 or item[0] == N or item[1] == -1 or item[1] == N]) != 0:
+        return False
+    elif len(position[0]) != len(set(position[0])):
+        return False
+    return True
 
 def user_input(position):
     while True:
