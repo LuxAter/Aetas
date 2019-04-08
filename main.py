@@ -1,14 +1,13 @@
 #!/usr/bin/python3
 
-from os.path import isdir
-import numpy as np
-import matplotlib.pyplot as plt
-from random import shuffle
-from argparse import ArgumentParser
 import random
 import time
-
+from os.path import isdir
+from random import shuffle
+from argparse import ArgumentParser
 from pprint import pprint
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def sort_by_fitness(pop, fitness):
@@ -80,11 +79,10 @@ def selection(pop, fitness, n_keep):
     new_pop = []
     for i in range(len(pop) - n_keep):
         r = np.random.rand()
-        j = 0
         for j in range(len(prob)):
             if prob[j] >= r:
+                new_pop.append(pop[j])
                 break
-        new_pop.append(pop[j])
     return new_pop
 
 
@@ -166,6 +164,11 @@ def main():
     parser.add_argument(
         '--epoch', type=int, default=10, help='Generations per epoch')
     parser.add_argument(
+        '--max-gen',
+        type=int,
+        default=1000,
+        help='Maximum number of generations')
+    parser.add_argument(
         '--save',
         action='store_true',
         help='Saves the top average fitness for each generation')
@@ -181,7 +184,7 @@ def main():
     averages = []
     times[0], pop = time_exec(args.time, initialize, n_pop, n_points)
     gen = 0
-    for gen in range(1000):
+    for gen in range(args.max_gen):
         tmp, fitness = time_exec(args.time, evaluate, pop)
         if args.save:
             pop, fitness = sort_by_fitness(pop, fitness)
