@@ -12,6 +12,20 @@ def valid(position, N):
         return False
     return True
 
+def draw(position, N):
+    print("\u250f{}\u2513".format("\u2501" * (N*2)))
+    for i in range(N):
+        row = ['  '] * N
+        for seg in position[0]:
+            if seg[1] == i:
+                row[seg[0]] = '\u2588\u2588'
+        if position[1][1] == i:
+            row[position[1][0]] = '\033[32m\u2588\u2588\033[0m'
+        print("\u2503{}\u2503".format(''.join(row)))
+    print("\u2517{}\u251B".format("\u2501" * (N*2)))
+    print("\033[H",end='',flush=True)
+
+
 def user_input(position):
     while True:
         move = input()
@@ -28,15 +42,18 @@ def user_input(position):
 
 
 def snake(N, get_move):
-    position = ([(np.random.randint(1, N - 1), np.random.randint(1, N - 1))],
-                (np.random.randint(1, N - 1), np.random.randint(1, N - 1)))
+    position = [[(np.random.randint(1, N - 1), np.random.randint(1, N - 1))],
+                (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
     while (True):
+        draw(position, N)
         move = get_move(position)
+        if move < 0:
+            break
         position = update(position, move)
         if not valid(position, N):
             break
-        draw(position, N)
 
 
 if __name__ == "__main__":
+    print("\033[2J\033[H")
     snake(20, user_input)
