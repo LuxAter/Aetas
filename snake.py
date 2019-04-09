@@ -18,6 +18,29 @@ def valid(position, N):
     return True
 
 
+def update(position, move,N):
+    apple = position[1]
+    snake = position[0]
+    new_square = [snake[-1][0],snake[-1][1]]
+    if move == 0:
+        new_square[1] -= 1
+    if move == 1:
+        new_square[1] += 1
+    if move == 2:
+        new_square[0] += 1
+    if move == 3:
+        new_square[0] -= 1
+    new_square = tuple(new_square)
+    snake.append(new_square)
+    if (new_square == apple):
+        apple = (np.random.randint(1, N - 1),np.random.randint(1, N - 1))
+        while apple in snake:
+            apple = (np.random.randint(1, N - 1), np.random.randint(1, N - 1))
+    else:
+        snake.pop(0)
+    return (snake,apple)
+
+
 def draw(position, N):
     print("\u250f{}\u2513".format("\u2501" * (N * 2)))
     for i in range(N):
@@ -39,13 +62,15 @@ def user_input(position):
             return 0
         elif move == 's':
             return 1
-        elif move == 'a':
-            return 2
         elif move == 'd':
+            return 2
+        elif move == 'a':
             return 3
         elif move == 'q':
             return -1
 
+def init(N):
+    return [[(np.random.randint(1, N - 1), np.random.randint(1, N - 1))], (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
 
 def snake(N, get_move):
     position = [[(np.random.randint(1, N - 1), np.random.randint(1, N - 1))],
@@ -55,7 +80,7 @@ def snake(N, get_move):
         move = get_move(position)
         if move < 0:
             break
-        position = update(position, move)
+        position = update(position, move, N)
         if not valid(position, N):
             break
 
