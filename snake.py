@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from enum import Enum
 from argparse import ArgumentParser
 import numpy as np
