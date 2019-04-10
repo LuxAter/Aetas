@@ -4,6 +4,8 @@ from enum import Enum
 from argparse import ArgumentParser
 import numpy as np
 
+import user
+
 
 def valid(position, N):
     """Valid if the following things are not true:
@@ -93,4 +95,5 @@ if __name__ == "__main__":
     parser.add_argument(
         "N", nargs='?', type=int, default=20, help="Size of snake grid")
     args = parser.parse_args()
-    snake(args.N, user_input)
+    # snake(args.N, user_input)
+    snake(args.N, user.input_time)
