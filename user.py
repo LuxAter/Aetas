@@ -56,6 +56,33 @@ def timeout(sec):
         pass
     return None
 
+def getinput(sec = None):
+    if sec is not None:
+        try:
+            with Timeout(sec):
+                return getinput()
+        except:
+            pass
+        return None
+    key = getch()
+    if ord(key) == 27:
+        ch = timeout(0.05)
+        if not ch:
+            return 'ESCAPE'
+        if ord(ch) == 91:
+            ch = timeout(0.05)
+            if ord(ch) == 65:
+                return 'UP'
+            elif ord(ch) == 66:
+                return 'DOWN'
+            elif ord(ch) == 67:
+                return 'RIGHT'
+            elif ord(ch) == 68:
+                return 'LEFT'
+    else:
+        return key
+
+
 def input(position):
     ch = getch()
     if ch == 'w':
@@ -74,33 +101,33 @@ prev = -2
 def input_time(position):
     global prev
     if prev == -2:
-        ch = getch()
-        if ch == 'w':
+        ch = getinput()
+        if ch == 'w' or ch == "UP":
             prev = 0
             return 0
-        elif ch == 's':
+        elif ch == 's' or ch == "DOWN":
             prev = 1
             return 1
-        elif ch == 'd':
+        elif ch == 'd' or ch == "RIGHT":
             prev = 2
             return 2
-        elif ch == 'a':
+        elif ch == 'a' or ch == "LEFT":
             prev = 3
             return 3
         elif ch == 'q':
             prev = -1
             return -1
-    ch = timeout(0.1)
-    if ch == 'w':
+    ch = getinput(0.1)
+    if ch == 'w' or ch == "UP":
         prev = 0
         return 0
-    elif ch == 's':
+    elif ch == 's' or ch == "DOWN":
         prev = 1
         return 1
-    elif ch == 'd':
+    elif ch == 'd' or ch == "RIGHT":
         prev = 2
         return 2
-    elif ch == 'a':
+    elif ch == 'a' or ch == "LEFT":
         prev = 3
         return 3
     elif ch == 'q':
