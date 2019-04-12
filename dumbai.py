@@ -1,7 +1,7 @@
 import time
 
-def dumb_ai(position):
-    time.sleep(0.1)
+def dumb_ai(position, N):
+    time.sleep(0.05)
     snake = position[0]
     apple = position[1]
 

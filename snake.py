@@ -6,6 +6,7 @@ import numpy as np
 
 import user
 import dumbai
+import perfectai
 
 
 def valid(position, N):
@@ -23,10 +24,10 @@ def valid(position, N):
     return True
 
 
-def update(position, move,N):
+def update(position, move, N):
     apple = position[1]
     snake = position[0]
-    new_square = [snake[-1][0],snake[-1][1]]
+    new_square = [snake[-1][0], snake[-1][1]]
     if move == 0:
         new_square[1] -= 1
     if move == 1:
@@ -38,12 +39,12 @@ def update(position, move,N):
     new_square = tuple(new_square)
     snake.append(new_square)
     if (new_square == apple):
-        apple = (np.random.randint(1, N - 1),np.random.randint(1, N - 1))
+        apple = (np.random.randint(1, N - 1), np.random.randint(1, N - 1))
         while apple in snake:
             apple = (np.random.randint(1, N - 1), np.random.randint(1, N - 1))
     else:
         snake.pop(0)
-    return (snake,apple)
+    return (snake, apple)
 
 
 def draw(position, N):
@@ -60,7 +61,7 @@ def draw(position, N):
     print("\033[H", end='', flush=True)
 
 
-def user_input(position):
+def user_input(position, N):
     while True:
         move = input()
         if move == 'w':
@@ -74,15 +75,18 @@ def user_input(position):
         elif move == 'q':
             return -1
 
+
 def init(N):
-    return [[(np.random.randint(1, N - 1), np.random.randint(1, N - 1))], (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
+    return [[(np.random.randint(1, N - 1), np.random.randint(1, N - 1))],
+            (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
+
 
 def snake(N, get_move):
     position = [[(np.random.randint(1, N - 1), np.random.randint(1, N - 1))],
                 (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
     while (True):
         draw(position, N)
-        move = get_move(position)
+        move = get_move(position, N)
         if move < 0:
             break
         position = update(position, move, N)
@@ -99,3 +103,4 @@ if __name__ == "__main__":
     # snake(args.N, user_input)
     # snake(args.N, user.input_time)
     snake(args.N, dumbai.dumb_ai)
+    # snake(args.N, perfectai.perfect_ai)
