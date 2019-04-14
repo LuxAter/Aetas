@@ -1,9 +1,11 @@
 class Output():
-    def __init__(self):
-        pass
+    def __init__(self, prev_layer):
+        self.prev_layer = prev_layer
+        self.input = None
 
     def forward(self):
-        pass
+        self.input = self.prev_layer.forward()
+
 
     def backward(self):
         pass
