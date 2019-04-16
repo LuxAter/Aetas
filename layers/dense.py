@@ -21,14 +21,14 @@ class Dense():
         grad = self.activ.backward(grad)
         grad_input = (self.weight.T@grad)
         #call previous layer
-        prev_layer.backward(grad_input)
+        self.prev_layer.backward(grad_input)
         #update weights
         # if weights grad has not been init, then init it.
         if not self.weights_grad:
             self.weights_grad = grad@self.input.T
         else:
             # if it has been, the add to it
-            self.weight_grad += grad@self.input.T
+            self.weights_grad += grad@self.input.T
         self.current_batch += 1
         # If we are at our batch size, then average the weights grad and
         # update the weights.
