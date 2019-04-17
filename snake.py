@@ -1,12 +1,29 @@
 #!/usr/bin/python3
 
+
 from enum import Enum
 from argparse import ArgumentParser
 import numpy as np
 
+import copy
 import user
 import dumbai
 import perfectai
+
+
+
+def get_pref(position, num_steps, N):
+    return [take_step(update(position,move,N),num_steps-1,N) for move in range(4)]
+
+
+#TODO: make insentive for apple
+def take_step(position, num_steps,N):
+    if not valid(position,N):
+        return 0
+    elif num_steps == 0:
+        return 1
+    weights = [take_step(update(position,move,N),num_steps-1,N) for move in range(4)]
+    return np.sum(weights)/4
 
 
 def valid(position, N):
@@ -25,8 +42,8 @@ def valid(position, N):
 
 
 def update(position, move, N):
-    apple = position[1]
-    snake = position[0]
+    apple = copy.deepcopy(position[1])
+    snake = copy.deepcopy(position[0])
     new_square = [snake[-1][0], snake[-1][1]]
     if move == 0:
         new_square[1] -= 1
@@ -74,6 +91,8 @@ def user_input(position, N):
             return 3
         elif move == 'q':
             return -1
+        elif move == 'm':
+            print(get_pref(position,2,N))
 
 
 def init(N):
@@ -100,7 +119,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "N", nargs='?', type=int, default=20, help="Size of snake grid")
     args = parser.parse_args()
-    # snake(args.N, user_input)
-    # snake(args.N, user.input_time)
-    snake(args.N, dumbai.dumb_ai)
-    # snake(args.N, perfectai.perfect_ai)
+    snake(args.N, user_input)
+    #snake(args.N, user.input_time)
+    #snake(args.N, dumbai.dumb_ai)
+    #snake(args.N, perfectai.perfect_ai)
