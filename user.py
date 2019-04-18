@@ -98,7 +98,7 @@ def input(position):
 
 prev = -2
 
-def input_time(position):
+def input_time(position, N):
     global prev
     if prev == -2:
         ch = getinput()

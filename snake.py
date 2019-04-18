@@ -2,28 +2,43 @@
 
 
 from enum import Enum
-from argparse import ArgumentParser
 import numpy as np
 
 import copy
-import user
-import dumbai
-import perfectai
-
-
 
 def get_pref(position, num_steps, N):
-    return [take_step(update(position,move,N),num_steps-1,N) for move in range(4)]
+    prefs = [0,0,0,0]
+    for move in range(4):
+        step = update(position, move, N)
+        if len(step[0]) > len(position[0]):
+            prefs[move] = 2.0 * take_step(step, num_steps - 1, N)
+        else:
+            prefs[move] = 1.0 * take_step(step, num_steps - 1, N)
+    return prefs
+    # return [take_step(update(position,move,N),num_steps-1,N) for move in range(4)]
 
 
 #TODO: make insentive for apple
-def take_step(position, num_steps,N):
-    if not valid(position,N):
+# def take_step(position, num_steps,N):
+#     if not valid(position,N):
+#         return 0
+#     elif num_steps == 0:
+#         return 1
+#     weights = [take_step(update(position,move,N),num_steps-1,N) for move in range(4)]
+#     return np.sum(weights)/4
+def take_step(position, num_steps, N):
+    if not valid(position, N):
         return 0
     elif num_steps == 0:
         return 1
-    weights = [take_step(update(position,move,N),num_steps-1,N) for move in range(4)]
-    return np.sum(weights)/4
+    weights = [0, 0, 0, 0]
+    for move in range(4):
+        step = update(position, move, N)
+        if len(step[0]) > len(position[0]):
+            weights[move] = 2.0 * take_step(step, num_steps - 1, N)
+        else:
+            weights[move] = 1.0 * take_step(step, num_steps - 1, N)
+    return np.sum(weights) / 4.0
 
 
 def valid(position, N):
@@ -111,15 +126,3 @@ def snake(N, get_move):
         position = update(position, move, N)
         if not valid(position, N):
             break
-
-
-if __name__ == "__main__":
-    print("\033[2J\033[H", end='', flush=True)
-    parser = ArgumentParser()
-    parser.add_argument(
-        "N", nargs='?', type=int, default=20, help="Size of snake grid")
-    args = parser.parse_args()
-    snake(args.N, user_input)
-    #snake(args.N, user.input_time)
-    #snake(args.N, dumbai.dumb_ai)
-    #snake(args.N, perfectai.perfect_ai)
