@@ -6,6 +6,43 @@ import numpy as np
 
 import copy
 
+def apple_ray(position,N):
+    head = position[0][-1]
+    apple = position[1]
+    
+    ret = [N**2+1 for i in range(8)]
+
+    horiz = apple[0]-head[0]
+    vert = apple[1]-head[1]
+    diag1 = (apple[1]-head[1])-(apple[0]-head[0])
+    diag2 = (apple[1]-head[1])+(apple[0]-head[0])
+
+    if (horiz == 0 and vert < 0):
+        ret[0] = abs(vert)
+
+    elif (horiz == 0 and vert > 0):
+        ret[4] = vert
+
+    elif (vert == 0 and horiz > 0):
+        ret[2] = horiz
+
+    elif (vert == 0 and horiz < 0):
+        ret[6] = abs(horiz)
+
+    elif (diag1 == 0 and vert > 0):
+        ret[3] = abs(horiz)+abs(vert)
+
+    elif (diag1 == 0 and vert < 0):
+        ret[7] = abs(horiz)+abs(vert)
+
+    elif (diag2 == 0 and vert > 0):
+        ret[5] = abs(horiz)+abs(vert)
+
+    elif (diag2 == 0 and vert < 0):
+        ret[1] = abs(horiz)+abs(vert)
+        
+    return ret
+    
 def get_pref(position, num_steps, N):
     prefs = [0,0,0,0]
     for move in range(4):
@@ -55,7 +92,7 @@ def valid(position, N):
         return False
     return True
 
-
+ 
 def update(position, move, N):
     apple = copy.deepcopy(position[1])
     snake = copy.deepcopy(position[0])
@@ -106,8 +143,8 @@ def user_input(position, N):
             return 3
         elif move == 'q':
             return -1
-        elif move == 'm':
-            print(get_pref(position,2,N))
+        elif move == 'r':
+            print(apple_ray(position,N))
 
 
 def init(N):
@@ -124,5 +161,6 @@ def snake(N, get_move):
         if move < 0:
             break
         position = update(position, move, N)
+        print(apple_ray(position,N))
         if not valid(position, N):
             break
