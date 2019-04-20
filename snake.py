@@ -187,15 +187,16 @@ def init(N):
 
 
 def snake(N, get_move):
+    score = 0
     position = [[(np.random.randint(1, N - 1), np.random.randint(1, N - 1))],
                 (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
     while (True):
+        score += 1
         draw(position, N)
         move = get_move(position, N)
         if move < 0:
             break
         position = update(position, move, N)
-        print(apple_ray(position, N))
-        print(position[0][-1])
         if not valid(position, N):
             break
+    return score + (100 * len(position[0]))
