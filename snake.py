@@ -1,14 +1,15 @@
 #!/usr/bin/python3
 
-
 from enum import Enum
 import numpy as np
 
 import copy
 
+
 def snake_ray(position, N):
     dists = []
-    for dirs in [(0,-1), (1,-1), (1,0), (1,1), (0, 1), (-1,1), (-1,0), (-1,-1)]:
+    for dirs in [(0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0),
+                 (-1, -1)]:
         done = False
         pos = list(position[0][-1])
         step = 0
@@ -23,12 +24,63 @@ def snake_ray(position, N):
             if done:
                 break
         if not done:
-            dists.append(N*N+1)
+            dists.append(N * N + 1)
+    return dists
+
+
+def apple_ray(position, N):
+    head = position[0][-1]
+    apple = position[1]
+    ret = [N**2 + 1 for i in range(8)]
+
+    horiz = apple[0] - head[0]
+    vert = apple[1] - head[1]
+    diag1 = (apple[1] - head[1]) - (apple[0] - head[0])
+    diag2 = (apple[1] - head[1]) + (apple[0] - head[0])
+
+    if (horiz == 0 and vert < 0):
+        ret[0] = abs(vert)
+
+    elif (horiz == 0 and vert > 0):
+        ret[4] = vert
+
+    elif (vert == 0 and horiz > 0):
+        ret[2] = horiz
+
+    elif (vert == 0 and horiz < 0):
+        ret[6] = abs(horiz)
+
+    elif (diag1 == 0 and vert > 0):
+        ret[3] = abs(horiz) + abs(vert)
+
+    elif (diag1 == 0 and vert < 0):
+        ret[7] = abs(horiz) + abs(vert)
+
+    elif (diag2 == 0 and vert > 0):
+        ret[5] = abs(horiz) + abs(vert)
+
+    elif (diag2 == 0 and vert < 0):
+        ret[1] = abs(horiz) + abs(vert)
+
+    return ret
+
+
+def wall_ray(position, N):
+    #position[0][-1][0] # the head'x
+    #position[0][-1][1] # the head's y
+    dists = [
+        position[0][-1][1], 0, N - 1 - position[0][-1][0], 0,
+        N - 1 - position[0][-1][1], 0, position[0][-1][0], 0
+    ]
+    dists[1] = 2 * min(dists[0], dists[2])
+    dists[3] = 2 * min(dists[2], dists[4])
+    dists[5] = 2 * min(dists[4], dists[6])
+    dists[7] = 2 * min(dists[6], dists[0])
     return dists
 
 
 def get_pref(position, num_steps, N):
-    prefs = [0,0,0,0]
+    prefs = [0, 0, 0, 0]
     for move in range(4):
         step = update(position, move, N)
         if len(step[0]) > len(position[0]):
@@ -36,10 +88,8 @@ def get_pref(position, num_steps, N):
         else:
             prefs[move] = 1.0 * take_step(step, num_steps - 1, N)
     return prefs
-    # return [take_step(update(position,move,N),num_steps-1,N) for move in range(4)]
 
 
-#TODO: make insentive for apple
 # def take_step(position, num_steps,N):
 #     if not valid(position,N):
 #         return 0
@@ -127,8 +177,8 @@ def user_input(position, N):
             return 3
         elif move == 'q':
             return -1
-        elif move == 'm':
-            print(get_pref(position,2,N))
+        elif move == 'r':
+            print(apple_ray(position, N))
 
 
 def init(N):
@@ -145,5 +195,7 @@ def snake(N, get_move):
         if move < 0:
             break
         position = update(position, move, N)
+        print(apple_ray(position, N))
+        print(position[0][-1])
         if not valid(position, N):
             break
