@@ -186,17 +186,28 @@ def init(N):
             (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
 
 
-def snake(N, get_move):
+def snake(N, get_move, max_turn = 0, display=False):
     score = 0
+    turn = 0
+    length = 1
     position = [[(np.random.randint(1, N - 1), np.random.randint(1, N - 1))],
                 (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
     while (True):
         score += 1
-        draw(position, N)
+        if display:
+            draw(position, N)
         move = get_move(position, N)
         if move < 0:
             break
         position = update(position, move, N)
+        if max_turn < 0 and len(position[0]) != length:
+            length = len(position[0])
+            turn = -1
         if not valid(position, N):
             break
-    return score + (100 * len(position[0]))
+        turn += 1
+        if max_turn > 0 and turn >= max_turn:
+            break
+        if max_turn < 0 and turn >= abs(max_turn):
+            break
+    return score + (1000 * len(position[0]))
