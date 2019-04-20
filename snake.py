@@ -43,6 +43,17 @@ def apple_ray(position,N):
         
     return ret
     
+def wall_ray(position, N):
+    #position[0][-1][0] # the head'x
+    #position[0][-1][1] # the head's y
+    dists = [position[0][-1][1], 0, N-1-position[0][-1][0], 0,
+             N-1-position[0][-1][1], 0, position[0][-1][0], 0]
+    dists[1] = 2*min(dists[0], dists[2])
+    dists[3] = 2*min(dists[2], dists[4])
+    dists[5] = 2*min(dists[4], dists[6])
+    dists[7] = 2*min(dists[6], dists[0])
+    return dists
+
 def get_pref(position, num_steps, N):
     prefs = [0,0,0,0]
     for move in range(4):
@@ -162,5 +173,6 @@ def snake(N, get_move):
             break
         position = update(position, move, N)
         print(apple_ray(position,N))
+        print(position[0][-1])
         if not valid(position, N):
             break
