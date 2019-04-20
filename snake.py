@@ -6,6 +6,27 @@ import numpy as np
 
 import copy
 
+def snake_ray(position, N):
+    dists = []
+    for dirs in [(0,-1), (1,-1), (1,0), (1,1), (0, 1), (-1,1), (-1,0), (-1,-1)]:
+        done = False
+        pos = list(position[0][-1])
+        step = 0
+        while pos[0] >= 0 and pos[1] >= 0 and pos[0] < N and pos[1] < N:
+            pos[0] += dirs[0]
+            pos[1] += dirs[1]
+            for seg in position[0]:
+                if seg[0] == pos[0] and seg[1] == pos[1]:
+                    dists.append(step)
+                    done = True
+            step += 1
+            if done:
+                break
+        if not done:
+            dists.append(N*N+1)
+    return dists
+
+
 def get_pref(position, num_steps, N):
     prefs = [0,0,0,0]
     for move in range(4):
