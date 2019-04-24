@@ -9,8 +9,9 @@ import time
 
 def snake_ray(position, N):
     dists = []
-    for dirs in [(0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0),
-                 (-1, -1)]:
+    # for dirs in [(0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0),
+    #              (-1, -1)]:
+    for dirs in [(0, -1),  (1, 0), (0, 1), (-1, 0)]:
         done = False
         pos = list(position[0][-1])
         step = 0
@@ -21,6 +22,7 @@ def snake_ray(position, N):
                 if seg[0] == pos[0] and seg[1] == pos[1]:
                     dists.append(step)
                     done = True
+                    break
             step += 1
             if done:
                 break
@@ -63,20 +65,25 @@ def apple_ray(position, N):
     elif (diag2 == 0 and vert < 0):
         ret[1] = abs(horiz) + abs(vert)
 
-    return ret
+    return [ret[0], ret[2], ret[4], ret[6]]
+    # return ret
 
 
 def wall_ray(position, N):
     #position[0][-1][0] # the head'x
     #position[0][-1][1] # the head's y
+    # dists = [
+    #     position[0][-1][1], 0, N - 1 - position[0][-1][0], 0,
+    #     N - 1 - position[0][-1][1], 0, position[0][-1][0], 0
+    # ]
+    # dists[1] = 2 * min(dists[0], dists[2])
+    # dists[3] = 2 * min(dists[2], dists[4])
+    # dists[5] = 2 * min(dists[4], dists[6])
+    # dists[7] = 2 * min(dists[6], dists[0])
     dists = [
-        position[0][-1][1], 0, N - 1 - position[0][-1][0], 0,
-        N - 1 - position[0][-1][1], 0, position[0][-1][0], 0
+        position[0][-1][1], N - 1 - position[0][-1][0],
+        N - 1 - position[0][-1][1],  position[0][-1][0]
     ]
-    dists[1] = 2 * min(dists[0], dists[2])
-    dists[3] = 2 * min(dists[2], dists[4])
-    dists[5] = 2 * min(dists[4], dists[6])
-    dists[7] = 2 * min(dists[6], dists[0])
     return dists
 
 
@@ -123,7 +130,8 @@ def valid(position, N):
             if item[0] == -1 or item[0] == N or item[1] == -1 or item[1] == N
     ]) != 0:
         return False
-    elif len(position[0]) != len(set(position[0])):
+    elif position[0][-1] in position[0][:-1]:
+    # elif len(position[0]) != len(set(position[0])):
         return False
     return True
 
@@ -193,6 +201,8 @@ def snake(N, get_move, max_turn = 0, display=False, sleep=None):
     length = 1
     position = [[(N //2, N//2)],
                 (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
+    for i in range(3):
+        position[0].append(position[0][0])
     # position = [[(np.random.randint(1, N - 1), np.random.randint(1, N - 1))],
     #             (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
     while (True):
