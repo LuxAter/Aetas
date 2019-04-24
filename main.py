@@ -12,6 +12,12 @@ import matplotlib.pyplot as plt
 
 import ai
 
+def best_fit_slope_and_intercept(xs,ys):
+    m = (((np.mean(xs)*np.mean(ys)) - np.mean(xs*ys)) /
+         ((np.mean(xs)*np.mean(xs)) - np.mean(xs*xs)))
+    b = np.mean(ys) - m*np.mean(xs)
+    return m, b
+
 
 def sort_by_fitness(pop, fitness):
     """Sorts population based by the value of fitness, meaning our most fit is
@@ -110,7 +116,7 @@ def time_exec(should_time, func, *argv):
 
 def main():
     parser = ArgumentParser('Genetic')
-    parser.add_argument('--N', type=int, default=50, help='Snake grid size')
+    parser.add_argument('--N', type=int, default=20, help='Snake grid size')
     parser.add_argument('--pop', type=int, default=100, help='Population size')
     parser.add_argument(
         '--keep',
@@ -137,7 +143,7 @@ def main():
     parser.add_argument(
         '--time', action='store_true', help='Time each function')
     parser.add_argument(
-        '--epoch', type=int, default=10, help='Generations per epoch')
+        '--epoch', type=int, default=100, help='Generations per epoch')
     parser.add_argument(
         '--max-gen',
         type=int,
@@ -158,15 +164,20 @@ def main():
     averages = []
     times[0], pop = time_exec(args.time, initialize, n_pop)
     gen = 0
+    fitnesses = []
     for gen in range(args.max_gen):
         tmp, fitness = time_exec(args.time, evaluate, pop)
         if args.save:
             pop, fitness = sort_by_fitness(pop, fitness)
             averages.append(np.average(fitness[:5]))
         times[1].append(tmp)
+        fitnesses.append(max(fitness))
         if gen % args.epoch == 0:
             if not args.no_print:
                 print("GEN: {:5} FIT: {}".format(gen, max(fitness)))
+                # print("{} GEN: {:5} FIT: {}".format("\n" * 30, gen, max(fitness)))
+                # pop, fitness = sort_by_fitness(pop, fitness)
+                # ai.evaluate(pop[0], display=True, sleep=0.05, avg=0)
         if terminate(fitness, tolerance):
             break
         pop_copy = [np.copy(chrom) for chrom in pop]
@@ -188,6 +199,11 @@ def main():
         print("CROS: {:f}s".format(sum(times[3]) / gen))
         print("MUTA: {:f}s".format(sum(times[4]) / gen))
         print("REPL: {:f}s".format(sum(times[5]) / gen))
+    plt.plot(fitnesses)
+    m, b = best_fit_slope_and_intercept(np.asarray(list(range(args.max_gen))), np.asarray(fitnesses))
+    print("AVG SLOPE: {}".format(m))
+    plt.plot([m*x+b for x in range(args.max_gen)])
+    plt.show()
     if args.save:
         if len(averages) < 1000:
             averages = averages + ([averages[-1]] * (1000 - len(averages)))

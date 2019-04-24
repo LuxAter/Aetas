@@ -4,6 +4,7 @@ from enum import Enum
 import numpy as np
 
 import copy
+import time
 
 
 def snake_ray(position, N):
@@ -186,13 +187,17 @@ def init(N):
             (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
 
 
-def snake(N, get_move, max_turn = 0, display=False):
+def snake(N, get_move, max_turn = 0, display=False, sleep=None):
     score = 0
     turn = 0
     length = 1
-    position = [[(np.random.randint(1, N - 1), np.random.randint(1, N - 1))],
+    position = [[(N //2, N//2)],
                 (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
+    # position = [[(np.random.randint(1, N - 1), np.random.randint(1, N - 1))],
+    #             (np.random.randint(1, N - 1), np.random.randint(1, N - 1))]
     while (True):
+        if sleep:
+            time.sleep(sleep)
         score += 1
         if display:
             draw(position, N)
