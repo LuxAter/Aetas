@@ -12,4 +12,4 @@ def plot_fitness(filename, fitness, smoothed=True):
     if smoothed:
         plt.plot(smooth(fitness, 25))
     # plt.ylim((min(fitness) - 10, max(fitness) + 10))
-    plt.savefig(filename, dpi=300, figsize=(8, 6))
+    plt.savefig(filename, dpi=300, figsize=(40, 30))

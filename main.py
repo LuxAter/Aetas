@@ -14,11 +14,8 @@ import ai
 import user
 import snake
 
-def best_fit_slope_and_intercept(xs,ys):
-    m = (((np.mean(xs)*np.mean(ys)) - np.mean(xs*ys)) /
-         ((np.mean(xs)*np.mean(xs)) - np.mean(xs*xs)))
-    b = np.mean(ys) - m*np.mean(xs)
-    return m, b
+NETWORK_ARCH = []
+NUM_VALS = 52
 
 
 def sort_by_fitness(pop, fitness):
@@ -28,8 +25,13 @@ def sort_by_fitness(pop, fitness):
     fitness, pop = zip(*sorted(data, key=lambda x: x[0], reverse=True))
     return list(pop), list(fitness)
 
+
 def initialize(n_pop):
-    return [np.random.rand(52) for i in range(n_pop)]
+    return [np.random.rand(NUM_VALS) for i in range(n_pop)]
+
+
+def ai_eval(chromo):
+    return ai.evaluate(chromo, NETWORK_ARCH)
 
 
 def evaluate(pop):
@@ -37,7 +39,7 @@ def evaluate(pop):
     distance for the specified chromosome."""
     fitnesses = [0] * len(pop)
     with Pool(8) as p:
-        fitness = p.map(ai.evaluate, pop)
+        fitness = p.map(ai_eval, pop)
     return fitness
 
 
@@ -117,8 +119,9 @@ def time_exec(should_time, func, *argv):
 
 
 def main():
+    global NETWORK_ARCH
+    global NUM_VALS
     parser = ArgumentParser('Genetic')
-    parser.add_argument('--N', type=int, default=20, help='Snake grid size')
     parser.add_argument('--pop', type=int, default=50, help='Population size')
     parser.add_argument(
         '--keep',
@@ -134,11 +137,6 @@ def main():
         '--probg', type=float, default=0.1, help='Probability to mutate a gene')
     parser.add_argument('--kpoint', type=int, default=2, help='k-point')
     parser.add_argument(
-        '--tol',
-        type=float,
-        default=0.001,
-        help='Tolerance to satisfy before termination')
-    parser.add_argument(
         '--no-print',
         action='store_true',
         help='Prevent printing durring evaluation')
@@ -152,36 +150,48 @@ def main():
         default=200,
         help='Maximum number of generations')
     parser.add_argument(
-        '--save',
+        '--view',
         action='store_true',
-        help='Saves the top average fitness for each generation')
+        help='View the best chromosome of the population')
+    parser.add_argument(
+        "--arch",
+        default=[],
+        type=int,
+        nargs='*',
+        help="Neural network architecture")
     args = parser.parse_args()
+    NETWORK_ARCH = list(args.arch)
+    NUM_VALS = 0
+    for i in range(1, len(NETWORK_ARCH)):
+        NUM_VALS += ((NETWORK_ARCH[i - 1] + 1) * NETWORK_ARCH[i])
+    if NETWORK_ARCH:
+        NUM_VALS += (13 * NETWORK_ARCH[0])
+        NUM_VALS += ((NETWORK_ARCH[-1] + 1) * 4)
+    else:
+        NUM_VALS = 52
     n_pop = args.pop
     n_keep = args.keep
     prob_m = args.probm
     gene_m = args.probg
-    tolerance = args.tol
     k = args.kpoint
     times = [0, [], [], [], [], [], []]
-    averages = []
     times[0], pop = time_exec(args.time, initialize, n_pop)
     gen = 0
     fitnesses = []
     for gen in range(args.max_gen):
         tmp, fitness = time_exec(args.time, evaluate, pop)
-        if args.save:
-            pop, fitness = sort_by_fitness(pop, fitness)
-            averages.append(np.average(fitness[:5]))
         times[1].append(tmp)
         fitnesses.append(max(fitness))
         if gen % args.epoch == 0:
             if not args.no_print:
-                # print("GEN: {:5} FIT: {}".format(gen, max(fitness)))
-                print("{} GEN: {:5} FIT: {}".format("\n" * 30, gen, max(fitness)))
-                pop, fitness = sort_by_fitness(pop, fitness)
-                ai.evaluate(pop[0], display=True, sleep=0.05, avg=1)
-        if terminate(fitness, tolerance):
-            break
+                if args.view:
+                    print("{} GEN: {:5} FIT: {}".format("\n" * 30, gen,
+                                                        max(fitness)))
+                    pop, fitness = sort_by_fitness(pop, fitness)
+                    ai.evaluate(
+                        pop[0], NETWORK_ARCH, display=True, sleep=0.05, avg=1)
+                else:
+                    print("GEN: {:5} FIT: {}".format(gen, max(fitness)))
         pop_copy = [np.copy(chrom) for chrom in pop]
         tmp, new_pop = time_exec(args.time, selection, pop_copy, fitness,
                                  n_keep)
@@ -200,16 +210,10 @@ def main():
         print("CROS: {:f}s".format(sum(times[3]) / gen))
         print("MUTA: {:f}s".format(sum(times[4]) / gen))
         print("REPL: {:f}s".format(sum(times[5]) / gen))
-    plot.plot_fitness("1b_layer.png", fitnesses)
-    # plt.plot(fitnesses)
-    # m, b = best_fit_slope_and_intercept(np.asarray(list(range(args.max_gen))), np.asarray(fitnesses))
-    # print("AVG SLOPE: {}".format(m))
-    # plt.plot([m*x+b for x in range(args.max_gen)])
-    # plt.show()
-    # if args.save:
-    #     if len(averages) < 1000:
-    #         averages = averages + ([averages[-1]] * (1000 - len(averages)))
-    #     print("FITNESS: {}".format(averages))
+    plot.plot_fitness(
+        "{}-{}-{}-{}-{}-{}.png".format(
+            '.'.join(['12'] + [str(x) for x in NETWORK_ARCH] + ['4']), n_pop,
+            args.max_gen, k, prob_m, gene_m), fitnesses)
 
 
 if __name__ == "__main__":
