@@ -31,7 +31,7 @@ class Network(object):
             self.biases = [np.asarray(vals[48:])]
 
     def forward(self, x):
-        x = np.asarray(x)
+        x = np.asarray([1.0/(i+1.0) for i in x])
         for i in range(len(self.weights)):
             x = self.activation((self.weights[i] @ x) + self.biases[i])
         return x.tolist()
