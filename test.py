@@ -5,7 +5,7 @@ import numpy as np
 import time
 import copy
 
-N = 10
+N = 20
 
 
 def user_input(position, N):
@@ -100,9 +100,9 @@ if __name__ == "__main__":
     #######
     for i in range(10000):
         if i%100 == 0:
-            losing_pos = snake2(N,net_move,weights,100,True,0.1)
+            losing_pos = snake2(N,net_move,weights,-100,True,0.01)
         else:
-            losing_pos = snake2(N,net_move,weights,100,False,0)
+            losing_pos = snake2(N,net_move,weights,-100,False,0)
         #vec:t
         losing_move = np.zeros(4)
         index = net_move(losing_pos,N)

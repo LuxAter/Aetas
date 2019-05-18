@@ -13,6 +13,7 @@ import plot
 import ai
 import user
 import snake
+import perfectai
 
 NETWORK_ARCH = []
 NUM_VALS = 52
@@ -217,5 +218,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
-    # snake.snake(20, user.input_time, -100, display=True)
+    # main()
+    snake.snake(20, perfectai.perfect_ai, -1000, display=True)
